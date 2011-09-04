@@ -90,13 +90,13 @@ objects of an ESX server just as you did with that HTML based browser. The
 syntax is:
    <your_app_name> ip_address user_name password
 
+
+======================================================
+License informaiton
+
+This project use Apache style open source license. You can use this in your
+project either open or closed source.
+
+
 Enjoy it!
-
-
-
-
-With another
-
-Note
-
 
