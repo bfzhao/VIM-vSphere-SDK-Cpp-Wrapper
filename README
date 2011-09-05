@@ -25,7 +25,7 @@ and wsdl2h.exe.
    This command will generate all necessary client stub code by gSOAP tools.
 
    For example:
-   vim,pl -p C:\SDK\vsphere-ws\wsdl\vim25\vimService.wsdl C:\wrapper
+   vim.pl -p C:\SDK\vsphere-ws\wsdl\vim25\vimService.wsdl C:\wrapper
 
    Make sure gSOAP binaries is $PATH environemnt variable
 
@@ -94,9 +94,7 @@ syntax is:
 ======================================================
 License informaiton
 
-This project use Apache style open source license. You can use this in your
+This project use BSD style open source license. You can use this in your
 project either open or closed source.
 
-
 Enjoy it!
-
