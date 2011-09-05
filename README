@@ -20,7 +20,7 @@ and wsdl2h.exe.
    folder.
 
 5. Execute
-   vim,pl -p <wsdl_file> [output folder]
+   vim.pl -p <wsdl_file> [output folder]
 
    This command will generate all necessary client stub code by gSOAP tools.
 

@@ -1,3 +1,32 @@
+#
+# Copyright (c) 2011, Bingfeng Zhao . All rights reserved.
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of EMC Inc. nor the names of its contributors
+#       may be used to endorse or promote products derived from this
+#       software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
 use strict;
 use warnings;
 use HTML::TreeBuilder;
@@ -12,6 +41,11 @@ my $prefix = "${ns}1__";	# follow gSOAP convention
 my %typeinfo_html;			# type information defined in HTML help files
 my %typeinfo_stub;			# type information defined in generated stub file
 my %name_to_C_type;			# name defined in HTML to type defined in stub file
+my $license = <<DOC;
+////////////////////////////////////////////////////////////////////////
+// Copyright (c) 2011, Bingfeng Zhao . All rights reserved.
+// 
+DOC
 
 sub get_text($);
 sub find_table($$);
@@ -675,6 +709,7 @@ sub print_header_begin($$)
 	my $macro = $header;
 	$macro =~ s/\./_/;
 	print <<DOC;
+$license
 #ifndef \U$macro\E
 #define \U$macro\E
 
@@ -780,6 +815,7 @@ sub print_source_begin($$)
 	my $header = shift;
 
 	print <<DOC;
+$license
 #include <sstream>
 #include <cassert>
 #include "soapVimBindingProxy.h"
@@ -1278,6 +1314,7 @@ sub print_browser_header_begin($$$)
 	my $macro = $header;
 	$macro =~ s/\./_/;
 	print <<DOC;
+$license
 #ifndef \U$macro\E
 #define \U$macro\E
 
@@ -1408,6 +1445,7 @@ sub print_browser_source_begin($$)
 	my $start = '@';
 
 	print <<DOC;
+$license
 #include <vector>
 #include <sstream>
 #include "$header"
@@ -2117,12 +2155,19 @@ sub main
 	elsif ($ARGV[0] eq "-p")
 	{
 		usage if $#ARGV < 1;
-		my $target = (defined $ARGV[1])? $ARGV[1] : '.';
+		my $target = (defined $ARGV[2])? $ARGV[2] : '.';
 		die "Target folder are not exist: $target\n" if not -d $target;
 		print "Generating client stub ... ";
-		generate_stub_with_gsoap $ARGV[1], $target;
-		print "DONE\n";
-		print "Please run again with -e to read type information from help.\n"
+		if (generate_stub_with_gsoap $ARGV[1], $target)
+		{
+			print "DONE\n";
+			print "Please run again with -e to read type information from help.\n"
+		}
+		else
+		{
+			print "FAILED\n";
+			print "Make sure gSOAP binaries are available in search path\n";
+		}
 	}
 	elsif ($ARGV[0] eq "-e")
 	{
