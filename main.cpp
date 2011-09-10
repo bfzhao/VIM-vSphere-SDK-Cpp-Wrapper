@@ -134,7 +134,7 @@ protected:
 			while (1)
 			{
 				_notif.wait_signalled();
-				auto local_copy = _members;
+				std::vector<tuple> local_copy = _members;
 				_members.clear();
 
 				size_t max_name = 0, max_type = 0;
@@ -146,7 +146,7 @@ protected:
 						max_type = local_copy[i].type.size();
 				}
 
-				auto sorted_local_copy = local_copy;
+				std::vector<tuple> sorted_local_copy = local_copy;
 				std::sort(sorted_local_copy.begin(), sorted_local_copy.end());
 				std::cout << "** " << _class_name << " **" << std::endl;
 				for (size_t i = 0; i < sorted_local_copy.size(); ++i)
@@ -163,7 +163,8 @@ protected:
 				{
 					std::stringstream ss;
 					ss << "<";
-					for (auto i = browse_histroy.begin(); i != browse_histroy.end(); ++i)
+					std::vector<const vim_browser::closure*>::iterator i;
+					for (i = browse_histroy.begin(); i != browse_histroy.end(); ++i)
 						ss << '/' << (*i)->type();
 					ss << '/' << c->type() << ">";
 
