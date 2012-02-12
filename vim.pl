@@ -1,3 +1,5 @@
+#! /usr/bin/perl
+
 #
 # Copyright (c) 2011, Bingfeng Zhao . All rights reserved.
 # Redistribution and use in source and binary forms, with or without
@@ -2074,7 +2076,7 @@ sub generate_stub_with_gsoap($$)
 	#  -s: don't generate STL code, use consr* instead of std:string
 	#  -o; output file
 	#  -n: the namespace prefix
-	my $wsdl2h = "wsdl2h.exe -s -o$tmp -n$ns $wsdl_file $xsd_files > NUL 2>&1";
+	my $wsdl2h = "wsdl2h -s -o$tmp -n$ns $wsdl_file $xsd_files > NUL 2>&1";
 	system $wsdl2h;
 	die "call wsdl2h failed: $!\n" if $? == -1;
 	return undef if ($? >> 8) != 0;
@@ -2084,7 +2086,7 @@ sub generate_stub_with_gsoap($$)
 	#  -L: don't generate soapClientLib/soapServerLib, needn not this
 	#  -i: generate service proxies and objects inherited from soap struct
 	#  -C: generate client-side code only
-	my $soapcpp2 = "soapcpp2.exe $tmp -x -L -i -C -d$target > NUL 2>&1";
+	my $soapcpp2 = "soapcpp2 $tmp -x -L -i -C -d$target > NUL 2>&1";
 	system($soapcpp2);
 	die "call soapcpp2 failed: $!\n" if $? == -1;
 	return undef if ($? >> 8) != 0;
@@ -2115,10 +2117,10 @@ sub generate($)
 {
 	my $target = shift;
 	load_type_info ".doc_typeinfo.txt";
-	parse_stub_header "$target\\soapStub.h";
+	parse_stub_header "$target/soapStub.h";
 
-	generate_wrapper "$target\\vim_wrapper.h", "$target\\vim_wrapper.cpp";
-	generate_browser "$target\\vim_browser.h", "$target\\vim_browser.cpp", "vim_wrapper.h";
+	generate_wrapper "$target/vim_wrapper.h", "$target/vim_wrapper.cpp";
+	generate_browser "$target/vim_browser.h", "$target/vim_browser.cpp", "vim_wrapper.h";
 }
 
 #
